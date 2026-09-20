@@ -1,0 +1,117 @@
+.navbar {
+  height: 74px;
+  padding: 0 7%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fffdf8;
+  border-bottom: 1px solid #e5e1d8;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* Logo */
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #172522;
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.logo-heart {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #d9362f;
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 16px;
+}
+
+
+/* Navigation */
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 35px;
+}
+
+.navbar-links a {
+  text-decoration: none;
+  color: #53605b;
+  font-size: 13px;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.navbar-links a:hover {
+  color: #d9362f;
+}
+
+
+/* Right buttons */
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.login-link {
+  text-decoration: none;
+  color: #273631;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.join-button {
+  text-decoration: none;
+  background: #172522;
+  color: white;
+  padding: 11px 18px;
+  font-size: 12px;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.join-button:hover {
+  background: #d9362f;
+}
+
+
+/* Mobile */
+
+@media (max-width: 700px) {
+
+  .navbar {
+    padding: 15px 5%;
+    height: auto;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .navbar-links {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .navbar-actions {
+    gap: 10px;
+  }
+
+  .join-button {
+    padding: 9px 12px;
+  }
+}
