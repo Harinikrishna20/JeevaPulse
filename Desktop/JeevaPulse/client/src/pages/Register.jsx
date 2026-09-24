@@ -1,20 +1,93 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./Register.css";
 
 function Register() {
   const [role, setRole] = useState("donor");
 
-  const handleSubmit = (event) => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    location: "",
+    bloodGroup: "",
+    organizationName: "",
+    organizationType: "",
+    password: "",
+  });
+
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+
+    setFormData((previousData) => ({
+      ...previousData,
+      [name]: value,
+    }));
+  };
+
+  const handleRoleChange = (event) => {
+    setRole(event.target.value);
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Backend will be connected here later.
-    alert("Account form submitted. Backend connection will be added later.");
+    setMessage("");
+    setError("");
+    setLoading(true);
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/auth/register",
+        {
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          password: formData.password,
+        }
+      );
+
+      if (response.data.success) {
+        setMessage("Account created successfully!");
+
+        // Save login information
+        localStorage.setItem("token", response.data.token);
+
+        localStorage.setItem(
+          "user",
+          JSON.stringify(response.data.user)
+        );
+
+        // Go to login page after registration
+        setTimeout(() => {
+          navigate("/login");
+        }, 1000);
+      }
+    } catch (error) {
+      console.error("Registration error:", error);
+
+      if (error.response) {
+        setError(
+          error.response.data.message ||
+            "Registration failed. Please try again."
+        );
+      } else {
+        setError(`Cannot connect to backend: ${error.message}`);
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="register-page">
-
       <div className="register-container">
 
         {/* Left Section */}
@@ -43,8 +116,10 @@ function Register() {
 
             <div className="register-point">
               <span>01</span>
+
               <div>
                 <strong>Create your profile</strong>
+
                 <p>
                   Add your basic information and account type.
                 </p>
@@ -53,8 +128,10 @@ function Register() {
 
             <div className="register-point">
               <span>02</span>
+
               <div>
                 <strong>Access your dashboard</strong>
+
                 <p>
                   Manage requests, responses and coordination.
                 </p>
@@ -63,8 +140,10 @@ function Register() {
 
             <div className="register-point">
               <span>03</span>
+
               <div>
                 <strong>Coordinate support</strong>
+
                 <p>
                   Connect with people and organizations through
                   the platform.
@@ -75,7 +154,6 @@ function Register() {
           </div>
 
         </div>
-
 
         {/* Right Section */}
         <div className="register-card">
@@ -94,7 +172,6 @@ function Register() {
 
           </div>
 
-
           <form onSubmit={handleSubmit}>
 
             {/* Name */}
@@ -106,12 +183,14 @@ function Register() {
 
               <input
                 type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
                 placeholder="Enter your full name"
                 required
               />
 
             </div>
-
 
             {/* Email + Phone */}
             <div className="register-form-row">
@@ -124,6 +203,9 @@ function Register() {
 
                 <input
                   type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
                   placeholder="you@example.com"
                   required
                 />
@@ -138,6 +220,9 @@ function Register() {
 
                 <input
                   type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
                   placeholder="10-digit mobile number"
                   required
                 />
@@ -145,7 +230,6 @@ function Register() {
               </div>
 
             </div>
-
 
             {/* Location */}
             <div className="register-form-group">
@@ -156,12 +240,14 @@ function Register() {
 
               <input
                 type="text"
+                name="location"
+                value={formData.location}
+                onChange={handleChange}
                 placeholder="City / Area"
                 required
               />
 
             </div>
-
 
             {/* Role */}
             <div className="register-form-group">
@@ -172,7 +258,7 @@ function Register() {
 
               <select
                 value={role}
-                onChange={(event) => setRole(event.target.value)}
+                onChange={handleRoleChange}
                 required
               >
 
@@ -192,7 +278,6 @@ function Register() {
 
             </div>
 
-
             {/* Blood Group - Donor only */}
             {role === "donor" && (
 
@@ -202,7 +287,12 @@ function Register() {
                   Blood Group
                 </label>
 
-                <select required>
+                <select
+                  name="bloodGroup"
+                  value={formData.bloodGroup}
+                  onChange={handleChange}
+                  required
+                >
 
                   <option value="">
                     Select blood group
@@ -223,7 +313,6 @@ function Register() {
 
             )}
 
-
             {/* Organization fields */}
             {role === "organization" && (
 
@@ -237,6 +326,9 @@ function Register() {
 
                   <input
                     type="text"
+                    name="organizationName"
+                    value={formData.organizationName}
+                    onChange={handleChange}
                     placeholder="Enter organization name"
                     required
                   />
@@ -249,7 +341,12 @@ function Register() {
                     Organization Type
                   </label>
 
-                  <select required>
+                  <select
+                    name="organizationType"
+                    value={formData.organizationType}
+                    onChange={handleChange}
+                    required
+                  >
 
                     <option value="">
                       Select type
@@ -279,7 +376,6 @@ function Register() {
 
             )}
 
-
             {/* Password */}
             <div className="register-form-group">
 
@@ -289,13 +385,15 @@ function Register() {
 
               <input
                 type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
                 placeholder="Create a password"
                 minLength="6"
                 required
               />
 
             </div>
-
 
             {/* Notice */}
             <div className="register-notice">
@@ -310,18 +408,31 @@ function Register() {
 
             </div>
 
+            {/* Messages */}
+            {message && (
+              <div className="register-success">
+                {message}
+              </div>
+            )}
+
+            {error && (
+              <div className="register-error">
+                {error}
+              </div>
+            )}
 
             {/* Submit */}
             <button
               type="submit"
               className="register-submit"
+              disabled={loading}
             >
-              Create Account
-              <span>→</span>
+              {loading ? "Creating Account..." : "Create Account"}
+
+              {!loading && <span>→</span>}
             </button>
 
           </form>
-
 
           <div className="register-login">
 
@@ -338,7 +449,6 @@ function Register() {
         </div>
 
       </div>
-
     </div>
   );
 }
