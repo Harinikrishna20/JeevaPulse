@@ -10,10 +10,18 @@ const generateToken = (user) => {
 
 const registerUser = async (req, res, next) => {
   try {
-    const { name, email, phone, password, role, location, bloodGroup } = req.body;
+    const { name, email, phone, password, confirmPassword, role, location, bloodGroup } = req.body;
 
     if (!name || !email || !phone || !password) {
       return next({ statusCode: 400, message: "Name, email, phone, and password are required" });
+    }
+
+    if (password.length < 8) {
+      return next({ statusCode: 400, message: "Password must be at least 8 characters." });
+    }
+
+    if (!confirmPassword || password !== confirmPassword) {
+      return next({ statusCode: 400, message: "Passwords do not match." });
     }
 
     const existingUser = await User.findOne({ email: email.toLowerCase() });

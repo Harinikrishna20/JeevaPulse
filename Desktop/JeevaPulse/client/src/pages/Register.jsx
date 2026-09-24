@@ -15,11 +15,14 @@ function Register() {
     organizationName: "",
     organizationType: "",
     password: "",
+    confirmPassword: "",
   });
 
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const navigate = useNavigate();
 
@@ -36,11 +39,36 @@ function Register() {
     setRole(event.target.value);
   };
 
+  const togglePasswordVisibility = (field) => {
+    if (field === "password") {
+      setShowPassword((previousState) => !previousState);
+      return;
+    }
+
+    setShowConfirmPassword((previousState) => !previousState);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     setMessage("");
     setError("");
+
+    if (!formData.password || formData.password.length < 8) {
+      setError("Password must be at least 8 characters.");
+      return;
+    }
+
+    if (!formData.confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -383,15 +411,56 @@ function Register() {
                 Password
               </label>
 
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="Create a password"
-                minLength="6"
-                required
-              />
+              <div className="password-input-wrapper">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="Create a password"
+                  minLength="6"
+                  required
+                />
+
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() => togglePasswordVisibility("password")}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? "🙈" : "👁️"}
+                </button>
+              </div>
+
+            </div>
+
+            {/* Confirm Password */}
+            <div className="register-form-group">
+
+              <label>
+                Confirm Password
+              </label>
+
+              <div className="password-input-wrapper">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  placeholder="Confirm password"
+                  minLength="6"
+                  required
+                />
+
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() => togglePasswordVisibility("confirmPassword")}
+                  aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
+                >
+                  {showConfirmPassword ? "🙈" : "👁️"}
+                </button>
+              </div>
 
             </div>
 
