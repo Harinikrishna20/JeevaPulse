@@ -81,7 +81,7 @@ function Profile() {
     };
 
     getProfile();
-  }, [token, navigate]);
+  }, [navigate]);
 
   const startEditing = () => {
     setFormData({
@@ -310,9 +310,9 @@ function Profile() {
             <div className="profile-item">
               <strong>Role</strong>
               <span>
-                {user.role === "requester"
-                  ? "Donar"
-                  : user.role || "User"}
+                {user.role === "organization"
+                  ? "Organization"
+                  : "Donor"}
               </span>
             </div>
 

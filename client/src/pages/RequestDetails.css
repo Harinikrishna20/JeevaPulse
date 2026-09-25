@@ -177,6 +177,49 @@
   color: #172522;
 }
 
+.request-detail-grid {
+  margin-top: 28px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: #e3e0d8;
+  text-align: left;
+}
+
+.request-detail-grid > div {
+  padding: 14px;
+  background: #fbfaf7;
+}
+
+.request-detail-grid span,
+.request-detail-grid strong {
+  display: block;
+}
+
+.request-detail-grid span {
+  margin-bottom: 6px;
+  color: #707a75;
+  font-size: 10px;
+}
+
+.request-detail-grid strong {
+  font-size: 12px;
+}
+
+.request-additional-details {
+  margin: 22px 0 0;
+  padding-top: 18px;
+  border-top: 1px solid #ebe8e1;
+  color: #707a75;
+  font-size: 12px;
+  line-height: 1.7;
+  text-align: left;
+}
+
+.request-additional-details strong {
+  color: #172522;
+}
+
 
 /* ================================
    SIDE CARD
@@ -349,6 +392,10 @@
 
   .request-main-card {
     padding: 35px 20px;
+  }
+
+  .request-detail-grid {
+    grid-template-columns: 1fr;
   }
 
   .request-detail-notice {

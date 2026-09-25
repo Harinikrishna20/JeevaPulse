@@ -1,6 +1,22 @@
 const BloodRequest = require("../models/BloodRequest");
 const Notification = require("../models/Notification");
 const Response = require("../models/Response");
+const User = require("../models/User");
+
+const getCompatibleDonorGroups = (bloodGroup) => {
+  const compatibilityMap = {
+    "O-": ["O-"],
+    "O+": ["O-", "O+"],
+    "A-": ["O-", "A-"],
+    "A+": ["O-", "O+", "A-", "A+"],
+    "B-": ["O-", "B-"],
+    "B+": ["O-", "O+", "B-", "B+"],
+    "AB-": ["O-", "A-", "B-", "AB-"],
+    "AB+": ["O-", "O+", "A-", "A+", "B-", "B+", "AB-", "AB+"],
+  };
+
+  return compatibilityMap[bloodGroup] || [bloodGroup];
+};
 
 const createRequest = async (req, res, next) => {
   try {
@@ -36,6 +52,27 @@ const createRequest = async (req, res, next) => {
       additionalDetails: additionalDetails || "",
       status: "PENDING",
     });
+
+    const donorGroups = getCompatibleDonorGroups(bloodGroup);
+
+    const matchingDonors = await User.find({
+      _id: { $ne: req.user._id },
+      isDonor: true,
+      availability: "AVAILABLE",
+      bloodGroup: { $in: donorGroups },
+    }).select("_id name email bloodGroup availability");
+
+    if (matchingDonors.length > 0) {
+      await Notification.insertMany(
+        matchingDonors.map((donor) => ({
+          recipient: donor._id,
+          type: "NEW_BLOOD_REQUEST",
+          title: "New blood request",
+          message: `A ${bloodGroup} blood request is active and matches your donor profile.`,
+          bloodRequest: request._id,
+        }))
+      );
+    }
 
     return res.status(201).json({
       success: true,

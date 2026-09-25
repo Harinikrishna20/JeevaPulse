@@ -1,8 +1,57 @@
-import { Link, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 import "./RequestDetails.css";
 
 function RequestDetails() {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const [request, setRequest] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    const loadRequest = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/requests/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        setRequest(response.data?.data || null);
+      } catch (requestError) {
+        if (requestError.response?.status === 401) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          navigate("/login");
+          return;
+        }
+
+        setError(
+          requestError.response?.data?.message ||
+            "Unable to load this blood request."
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadRequest();
+  }, [id, navigate]);
+
+  const formatDate = (date) =>
+    date ? new Date(date).toLocaleDateString() : "Not provided";
 
   return (
     <div className="request-details-page">
@@ -45,19 +94,62 @@ function RequestDetails() {
               🩸
             </div>
 
-            <p className="request-detail-label">
-              REQUEST
-            </p>
+            {loading ? (
+              <h2>Loading request details...</h2>
+            ) : error ? (
+              <>
+                <p className="request-detail-label">REQUEST</p>
+                <h2>{error}</h2>
+              </>
+            ) : request ? (
+              <>
+                <p className="request-detail-label">{request.status}</p>
+                <h2>{request.patientName} needs {request.bloodGroup} blood</h2>
 
-            <h2>
-              Request details will appear here
-            </h2>
+                <div className="request-detail-grid">
+                  <div>
+                    <span>Blood group</span>
+                    <strong>{request.bloodGroup}</strong>
+                  </div>
+                  <div>
+                    <span>Units required</span>
+                    <strong>{request.unitsRequired}</strong>
+                  </div>
+                  <div>
+                    <span>Urgency</span>
+                    <strong>{request.urgency}</strong>
+                  </div>
+                  <div>
+                    <span>Required date</span>
+                    <strong>{formatDate(request.requiredDate)}</strong>
+                  </div>
+                  <div>
+                    <span>Hospital</span>
+                    <strong>{request.hospitalName}</strong>
+                  </div>
+                  <div>
+                    <span>Location</span>
+                    <strong>{request.location}</strong>
+                  </div>
+                  <div>
+                    <span>Contact number</span>
+                    <strong>{request.contactNumber}</strong>
+                  </div>
+                  <div>
+                    <span>Requester</span>
+                    <strong>{request.requester?.name || "Not provided"}</strong>
+                  </div>
+                </div>
 
-            <p>
-              This page is ready to display the request identified
-              by <strong>{id}</strong> once the backend provides
-              the actual request information.
-            </p>
+                {request.additionalDetails && (
+                  <p className="request-additional-details">
+                    <strong>Additional details:</strong> {request.additionalDetails}
+                  </p>
+                )}
+              </>
+            ) : (
+              <h2>Request not found</h2>
+            )}
 
           </div>
 

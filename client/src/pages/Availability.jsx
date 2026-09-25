@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import "./Availability.css";
 
 function Availability() {
-  const [availability, setAvailability] = useState("not-configured");
+  const [availability, setAvailability] = useState("available");
   const [saved, setSaved] = useState(false);
 
   const handleSave = () => {
@@ -101,31 +101,6 @@ function Availability() {
             </label>
 
 
-            <label
-              className={`availability-option ${
-                availability === "not-configured" ? "selected" : ""
-              }`}
-            >
-              <input
-                type="radio"
-                name="availability"
-                value="not-configured"
-                checked={availability === "not-configured"}
-                onChange={(e) => {
-                  setAvailability(e.target.value);
-                  setSaved(false);
-                }}
-              />
-
-              <div className="availability-radio"></div>
-
-              <div>
-                <strong>Not Configured</strong>
-                <p>
-                  I have not decided my current availability.
-                </p>
-              </div>
-            </label>
 
           </div>
 

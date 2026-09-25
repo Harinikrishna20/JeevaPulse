@@ -4,7 +4,7 @@ import axios from "axios";
 import "./Register.css";
 
 function Register() {
-  const [role, setRole] = useState("donor");
+  const [role, setRole] = useState("user");
 
   const [formData, setFormData] = useState({
     name: "",
@@ -145,9 +145,9 @@ function Register() {
     }
 
     // ------------------------------------------
-    // Donor validation
+    // Donor validation for all non-organization users
     // ------------------------------------------
-    if (role === "donor" && !formData.bloodGroup) {
+    if (role !== "organization" && !formData.bloodGroup) {
       setError("Please select your blood group.");
       return;
     }
@@ -184,9 +184,9 @@ function Register() {
           location: formData.location.trim(),
 
           bloodGroup:
-            role === "donor"
-              ? formData.bloodGroup
-              : "",
+            role === "organization"
+              ? ""
+              : formData.bloodGroup,
 
           password: password,
 
@@ -194,7 +194,7 @@ function Register() {
           // Backend requires this field
           confirmPassword: confirmPassword,
 
-          role: role,
+          role: role === "organization" ? "organization" : "user",
 
           organizationName:
             role === "organization"
@@ -501,12 +501,8 @@ function Register() {
                 required
               >
 
-                <option value="donor">
+                <option value="user">
                   Donor
-                </option>
-
-                <option value="requester">
-                  Donar
                 </option>
 
                 <option value="organization">
@@ -520,7 +516,7 @@ function Register() {
             {/* ==================================
                 BLOOD GROUP
             =================================== */}
-            {role === "donor" && (
+            {role !== "organization" && (
               <div className="register-form-group">
 
                 <label>

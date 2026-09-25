@@ -28,7 +28,7 @@ function Home() {
             </Link>
 
             <Link to="/register" className="secondary-button">
-              Become a Donor
+              Join JeevaPulse
             </Link>
           </div>
 
@@ -86,9 +86,9 @@ function Home() {
 
           <Link to="/register" className="quick-card">
             <div className="quick-icon green">♥</div>
-            <h3>Become a Donor</h3>
+            <h3>Join Network</h3>
             <p>
-              Join the network and respond to blood requests.
+              Register and begin supporting the blood coordination network.
             </p>
             <span>Join Network →</span>
           </Link>

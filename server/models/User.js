@@ -41,12 +41,12 @@ const userSchema = new mongoose.Schema(
     },
     isDonor: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     availability: {
       type: String,
-      enum: ["AVAILABLE", "UNAVAILABLE", ""],
-      default: "",
+      enum: ["AVAILABLE", "UNAVAILABLE"],
+      default: "AVAILABLE",
     },
   },
   {

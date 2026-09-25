@@ -109,7 +109,7 @@ const registerUser = async (req, res, next) => {
 
       password: hashedPassword,
 
-      role: role || "user",
+      role: role === "organization" ? "organization" : "user",
 
       location: location
         ? location.trim()
@@ -117,6 +117,9 @@ const registerUser = async (req, res, next) => {
 
       bloodGroup:
         bloodGroup || "",
+
+      isDonor: true,
+      availability: "AVAILABLE",
     });
 
     // ----------------------------------------

@@ -24,11 +24,5 @@ router.put(
   updateProfile
 );
 
-// Register logged-in user as a donor
-router.put(
-  "/become-donor",
-  protect,
-  becomeDonor
-);
 
 module.exports = router;

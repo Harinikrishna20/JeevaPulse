@@ -8,6 +8,7 @@ const API_URL = "http://localhost:5000/api/requests";
 function MyBloodRequests() {
   const navigate = useNavigate();
   const [requests, setRequests] = useState([]);
+  const [responsesByRequest, setResponsesByRequest] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const token = localStorage.getItem("token");
@@ -27,6 +28,24 @@ function MyBloodRequests() {
         });
 
         setRequests(response.data?.data || []);
+
+        const requestList = response.data?.data || [];
+        const responseEntries = await Promise.all(
+          requestList.map(async (request) => {
+            const responseList = await axios.get(
+              `http://localhost:5000/api/responses/request/${request._id}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
+
+            return [request._id, responseList.data?.data || []];
+          })
+        );
+
+        setResponsesByRequest(Object.fromEntries(responseEntries));
       } catch (requestError) {
         if (requestError.response?.status === 401) {
           localStorage.removeItem("token");
@@ -46,6 +65,46 @@ function MyBloodRequests() {
 
     loadRequests();
   }, [navigate, token]);
+
+  const updateResponse = async (responseId, action) => {
+    try {
+      await axios.put(
+        `http://localhost:5000/api/responses/${responseId}/${action}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      window.location.reload();
+    } catch (requestError) {
+      setError(
+        requestError.response?.data?.message ||
+          `Unable to ${action} this response.`
+      );
+    }
+  };
+
+  const markRequestFulfilled = async (requestId) => {
+    try {
+      await axios.put(
+        `${API_URL}/${requestId}/status`,
+        { status: "FULFILLED" },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setRequests((previousRequests) =>
+        previousRequests.map((request) =>
+          request._id === requestId
+            ? { ...request, status: "FULFILLED" }
+            : request
+        )
+      );
+    } catch (requestError) {
+      setError(
+        requestError.response?.data?.message ||
+          "Unable to mark this request as fulfilled."
+      );
+    }
+  };
 
   const handleDelete = async (requestId) => {
     if (!window.confirm("Delete this blood request?")) {
@@ -130,10 +189,50 @@ function MyBloodRequests() {
 
                 <div className="my-request-actions">
                   <Link to={`/requests/${request._id}`}>View details</Link>
+                  {request.status !== "FULFILLED" && (
+                    <button
+                      type="button"
+                      onClick={() => markRequestFulfilled(request._id)}
+                    >
+                      Mark fulfilled
+                    </button>
+                  )}
                   <button type="button" onClick={() => handleDelete(request._id)}>
                     Delete
                   </button>
                 </div>
+
+                {(responsesByRequest[request._id] || []).length > 0 && (
+                  <div className="request-responses">
+                    <h3>Donor responses</h3>
+                    {responsesByRequest[request._id].map((response) => (
+                      <div className="request-response" key={response._id}>
+                        <div>
+                          <strong>{response.donor?.name || "Donor"}</strong>
+                          <span>
+                            {response.donor?.bloodGroup || "Blood group not provided"}
+                          </span>
+                          <small>{response.message || "No message provided"}</small>
+                        </div>
+                        <div className="request-response-actions">
+                          <span className={`response-status response-status-${response.status.toLowerCase()}`}>
+                            {response.status}
+                          </span>
+                          {response.status === "PENDING" && (
+                            <>
+                              <button type="button" onClick={() => updateResponse(response._id, "accept")}>
+                                Accept
+                              </button>
+                              <button type="button" onClick={() => updateResponse(response._id, "reject")}>
+                                Reject
+                              </button>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </article>
             ))}
           </section>
