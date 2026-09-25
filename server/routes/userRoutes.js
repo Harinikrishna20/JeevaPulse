@@ -1,0 +1,34 @@
+const express = require("express");
+
+const {
+  getProfile,
+  updateProfile,
+  becomeDonor,
+} = require("../controllers/userController");
+
+const { protect } = require("../middleware/authMiddleware");
+
+const router = express.Router();
+
+// Get logged-in user's profile
+router.get(
+  "/profile",
+  protect,
+  getProfile
+);
+
+// Update logged-in user's profile
+router.put(
+  "/profile",
+  protect,
+  updateProfile
+);
+
+// Register logged-in user as a donor
+router.put(
+  "/become-donor",
+  protect,
+  becomeDonor
+);
+
+module.exports = router;

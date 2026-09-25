@@ -1,0 +1,408 @@
+/* ================================
+   JEEVAPULSE - REQUESTS PAGE
+================================ */
+
+.requests-page {
+  min-height: calc(100vh - 74px);
+  background: #f7f5ef;
+  color: #172522;
+  padding-bottom: 70px;
+}
+
+
+/* ================================
+   HEADER
+================================ */
+
+.requests-header {
+  width: 86%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 65px 0 40px;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.requests-header p {
+  margin: 0 0 12px;
+
+  color: #d9362f;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+}
+
+.requests-header h1 {
+  margin: 0 0 12px;
+
+  color: #172522;
+  font-size: 46px;
+  line-height: 1.05;
+  font-weight: 700;
+}
+
+.requests-header span {
+  display: block;
+
+  color: #69736e;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+
+/* ================================
+   NEED BLOOD BUTTON
+================================ */
+
+.request-blood-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #d9362f;
+  color: white;
+
+  padding: 13px 20px;
+
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 700;
+
+  white-space: nowrap;
+
+  transition: 0.2s;
+}
+
+.request-blood-button:hover {
+  background: #172522;
+}
+
+
+/* ================================
+   FILTER SECTION
+================================ */
+
+.filter-section {
+  width: 86%;
+  max-width: 1200px;
+  margin: 0 auto 35px;
+
+  background: #ffffff;
+  border: 1px solid #ddd9d0;
+
+  padding: 25px;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+
+  box-shadow: 0 8px 25px rgba(23, 37, 34, 0.03);
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-group label {
+  margin-bottom: 8px;
+
+  color: #26352f;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.filter-group select,
+.filter-group input {
+  width: 100%;
+  height: 44px;
+
+  background: #fcfbf8;
+  border: 1px solid #d8d5ce;
+
+  padding: 0 12px;
+
+  color: #26352f;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+
+  outline: none;
+}
+
+.filter-group select:focus,
+.filter-group input:focus {
+  border-color: #d9362f;
+}
+
+
+/* ================================
+   EMPTY REQUEST AREA
+================================ */
+
+.requests-empty {
+  width: 86%;
+  max-width: 1200px;
+  min-height: 390px;
+
+  margin: 0 auto;
+
+  background: #ffffff;
+  border: 1px solid #ddd9d0;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  padding: 50px 30px;
+
+  box-shadow: 0 8px 25px rgba(23, 37, 34, 0.03);
+}
+
+
+/* Blood icon */
+
+.empty-icon {
+  width: 64px;
+  height: 64px;
+
+  margin-bottom: 22px;
+
+  background: #fae5e3;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 25px;
+
+  border-radius: 2px;
+}
+
+
+/* Heading */
+
+.requests-empty h2 {
+  margin: 0 0 12px;
+
+  color: #172522;
+
+  font-size: 25px;
+  font-weight: 700;
+}
+
+
+/* Description */
+
+.requests-empty p {
+  max-width: 500px;
+
+  margin: 0 0 28px;
+
+  color: #707a75;
+
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+
+/* Create button */
+
+.empty-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #172522;
+  color: white;
+
+  padding: 13px 22px;
+
+  text-decoration: none;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  transition: 0.2s;
+}
+
+.empty-button:hover {
+  background: #d9362f;
+}
+
+
+/* ================================
+   INFORMATION BOX
+================================ */
+
+.request-information {
+  width: 86%;
+  max-width: 1200px;
+
+  margin: 25px auto 0;
+
+  padding: 18px 20px;
+
+  background: #eeece5;
+
+  border: 1px solid #e1ddd3;
+
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.request-information strong {
+  color: #d9362f;
+
+  font-size: 10px;
+
+  white-space: nowrap;
+}
+
+.request-information span {
+  color: #68736e;
+
+  font-size: 10px;
+  line-height: 1.7;
+}
+
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 900px) {
+
+  .requests-header {
+    width: 90%;
+
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .filter-section {
+    width: 90%;
+
+    grid-template-columns: 1fr;
+  }
+
+  .requests-empty {
+    width: 90%;
+  }
+
+  .request-information {
+    width: 90%;
+  }
+}
+
+
+@media (max-width: 600px) {
+
+  .requests-page {
+    padding-bottom: 40px;
+  }
+
+  .requests-header {
+    padding-top: 45px;
+  }
+
+  .requests-header h1 {
+    font-size: 36px;
+  }
+
+  .filter-section {
+    padding: 18px;
+  }
+
+  .requests-empty {
+    min-height: 330px;
+    padding: 35px 20px;
+  }
+
+  .request-information {
+    flex-direction: column;
+  }
+}
+
+.request-feedback {
+  max-width: 1150px;
+  margin: 0 auto 18px;
+  padding: 13px 16px;
+  background: #e7f3ed;
+  color: #34715b;
+  font-size: 12px;
+}
+
+.request-error {
+  background: #fff5f4;
+  color: #b92d27;
+}
+
+.requests-list {
+  max-width: 1150px;
+  margin: 0 auto;
+  display: grid;
+  gap: 14px;
+}
+
+.request-card {
+  padding: 22px 24px;
+  background: white;
+  border: 1px solid #e3dfd6;
+}
+
+.request-card-header,
+.request-card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.request-blood-group {
+  margin-bottom: 7px;
+  color: #d9362f;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.request-card h2 {
+  font-size: 18px;
+}
+
+.request-card-status {
+  padding: 7px 10px;
+  background: #fff4d6;
+  color: #916b16;
+  font-size: 10px;
+}
+
+.request-card-details {
+  margin: 16px 0;
+  color: #737d78;
+  font-size: 12px;
+}
+
+.request-card-actions {
+  justify-content: flex-start;
+  padding-top: 14px;
+  border-top: 1px solid #ebe7df;
+}
+
+.request-card-actions a,
+.request-card-actions button {
+  border: 0;
+  background: transparent;
+  color: #d9362f;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
